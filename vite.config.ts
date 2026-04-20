@@ -3,8 +3,8 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
 export default defineConfig({
-  // Repo
-  base: '/music-gallery/',
+  // Repo /repo-name/
+  base: './',
 
   build: {
     outDir: 'dist',

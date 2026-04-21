@@ -1,7 +1,53 @@
 import { get_track_from_album } from "../ressource/fetch"
 import type { Track } from "../types"
 
-async function renderPage() {
+import { createElement } from "../utils/dom"
+
+function renderTrack(tracks: Track[]) {
+    let container = document.getElementById("track-container")
+    if (!container) {
+        console.log("l'id album-container est introuvable")
+        return
+    }  
+    
+    for (const track of tracks) {
+        const div = createElement("div", {className: ["track"]})
+
+        const title = createElement("h2", {
+            className: ["track-name"],
+            textContent: `${track.track_index} - ${track.track_name}`
+        })
+
+        const div_info = createElement("div", {className: ["info"]})
+
+        const duration = createElement("p", {
+            className : ["duration"],
+            textContent : `durée : ${track.duration_m_s}`
+        })
+
+        const lyrics = createElement("p", {
+            className : ["lyrics"],
+            textContent : `parole : ${track.lyrics}`
+        })
+
+        const rating = createElement("p", {
+            className : ["rating"],
+            textContent : `note : ${track.rating}/10`
+        })
+
+        const comment = createElement("p", {
+            className : ["comment"],
+            textContent : track.comment
+        })
+
+        div_info.append(duration, lyrics, rating)
+        div.append(title, div_info, comment)
+        container.insertAdjacentElement("beforeend", div)
+    }
+}
+
+
+async function initPage() {
     const params = new URL(window.location.href).searchParams
     const album_uuid = params.get("ID")
 
@@ -12,28 +58,12 @@ async function renderPage() {
         
     const data: Track[] = await get_track_from_album(album_uuid)
     const cover_url = `https://fidfksvexbwqhbotefji.supabase.co/storage/v1/object/public/albumCover/${album_uuid}.jpg`
-    let track_HTML =  data.map(track =>
-        `
-        <div class="track">
-            <h2 class="track_name">${track.track_index} - ${track.track_name}</h2>
-            <div class="info">
-                <p class="duration">durée : ${track.duration_m_s}</p>
-                <p class="lyrics">parole : ${track.lyrics}</p>
-                <p class="rating">note : ${track.rating}/10</p>
-            </div>
-            <p class="comment">${track.comment}</p>
-        </div>`
-    ).join('');
 
-    let album_cover = document.getElementById("album-cover") as HTMLElement
-    let track_container = document.getElementById("track-container") as HTMLElement
+    let album_cover = document.getElementById("album-cover")
+    if (album_cover)
+        album_cover.setAttribute("src", cover_url)
 
-    album_cover.setAttribute("src", cover_url)
-    track_container.innerHTML = track_HTML;
+    renderTrack(data)
 }
 
-renderPage()
-
-
-
-
+initPage()

@@ -1,32 +1,68 @@
 import { get_album } from "../ressource/fetch";
 import type { Album } from "../types";
 
-
-function renderAlbum(data: any[]){
-    const album_HTML =  data.map(album =>
-        `<div class="album">
-            <h2 class="album-name">${album.album_name}</h2>
-            <div class="album-content">
-                <img class="album-cover" src="${album.cover_url}" loading="lazy" alt="">
-                <div class="info">
-                    <p class="artist-name">de : ${album.artist_name}</p>
-                    <p class="track-count">nombre de titre : ${album.track_count}</p>
-                    <p class="duration">durée : ${album.duration_m_s}</p>
-                    <a href="./album.html?ID=${album.id}">lien</a>
-                </div>
-            </div>
-            <p class="comment">${album.comment}</p>
-            
-        </div>`
-    ).join('');
+import { createElement } from "../utils/dom";
 
 
+
+function renderAlbum(albums: Album[]){
     let container = document.getElementById("album-container")
-    if (container)
-        container.insertAdjacentHTML("beforeend", album_HTML);
-    else 
+    if (!container) {
         console.log("l'id album-container est introuvable")
+        return
+    }
 
+    for (const album of albums) {
+        const div = createElement("div", {className : ["album"]})
+
+        const title = createElement("h2",{
+            className : ["album-name"],
+            textContent : album.album_name
+        })
+
+        const div_content = createElement("div", {className : ["album-content"]})
+
+        const img = createElement("img", {
+            className : ["album-cover"],
+            attributes : [
+                ["src", album.cover_url],
+                ["loading", "lazy"],
+                ["alt", "cover"]
+            ]
+        })
+
+        const div_info = createElement("div", {className : ["info"]})
+
+        const artist_name = createElement("p", {
+            className : ["artist-name"],
+            textContent : `de : ${album.artist_name}`
+        })
+
+        const track_count = createElement("p", {
+            className : ["track-count"],
+            textContent : `durée : ${album.track_count}`
+        })
+
+        const duration = createElement("p", {
+            className : ["duration"],
+            textContent : `durée : ${album.duration_m_s}`
+        })
+
+        const a = createElement("a", {
+            textContent : "lien",
+            attributes : [["href", `./album.html?ID=${album.id}`]]
+        })
+
+        const comment = createElement("p", {
+            className : ["comment"],
+            textContent : album.comment
+        })
+
+        div_info.append(artist_name, track_count, duration, a)
+        div_content.append(img, div_info)
+        div.append(title, div_content, comment)   
+        container.insertAdjacentElement("beforeend", div)
+    }
 }
 
 const CACHE_DURATION: number = 1000 * 60 * 60 // 1 heure

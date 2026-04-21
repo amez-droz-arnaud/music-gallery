@@ -49,7 +49,8 @@ function renderAlbum(albums: Album[]){
         })
 
         const a = createElement("a", {
-            textContent : "lien",
+            className : ["link"],
+            textContent : "aperçu",
             attributes : [["href", `./album.html?ID=${album.id}`]]
         })
 
@@ -58,9 +59,9 @@ function renderAlbum(albums: Album[]){
             textContent : album.comment
         })
 
-        div_info.append(artist_name, track_count, duration, a)
+        div_info.append(artist_name, track_count, duration)
         div_content.append(img, div_info)
-        div.append(title, div_content, comment)   
+        div.append(title, div_content, comment, a)   
         container.insertAdjacentElement("beforeend", div)
     }
 }

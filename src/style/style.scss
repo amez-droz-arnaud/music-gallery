@@ -1,0 +1,68 @@
+@use "abstract" as *;
+@use "sass:color";
+
+/* ABSTRACT */
+
+* {
+    box-sizing: border-box;
+    font-family: $font-family;
+}
+
+a {
+    display: block;
+    text-decoration: none;
+    color: $text-color;
+}
+
+img {
+    width: 200px;
+}
+
+body {
+
+    color: $text-color;
+    background-color: $background-color;
+    margin: 0;
+}
+
+
+#album-container {
+    display: flex;
+    justify-self: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+
+    padding: 1rem;
+    gap: 1rem;
+
+    max-width: 1000px;
+}
+
+.album {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    padding: 1rem;
+    border: 1px solid color.adjust($background-color, $lightness: 20%);
+    .album-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+
+        img.album-cover {
+            display: block;
+            height: 140px;
+            flex-shrink: 0;
+        }
+    }
+
+    a.link {
+        padding: 0.4rem 0.8rem;
+        width: fit-content;
+        margin: 0 auto;
+        color: $background-color;
+        font-weight: 600;
+        background-color: $active-color;
+    }    
+}
+

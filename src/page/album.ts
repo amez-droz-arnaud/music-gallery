@@ -3,14 +3,12 @@ import type { Track } from "../types"
 
 import { createElement } from "../utils/dom"
 
-function renderTrack(tracks: Track[]) {
-    let container = document.getElementById("track-container")
-    if (!container) {
-        console.log("l'id album-container est introuvable")
-        return
-    }  
+function renderTrack(tracks: Track[], container: HTMLDivElement) {
     
     for (const track of tracks) {
+
+        const track_container = createElement("div", {attributes : [["id", "track-container"]]}) as HTMLDivElement
+    
         const div = createElement("div", {className: ["track"]})
 
         const title = createElement("h2", {
@@ -40,9 +38,11 @@ function renderTrack(tracks: Track[]) {
             textContent : track.comment
         })
 
+
         div_info.append(duration, lyrics, rating)
         div.append(title, div_info, comment)
-        container.insertAdjacentElement("beforeend", div)
+        track_container.append(div)
+        container.insertAdjacentElement("beforeend", track_container)
     }
 }
 
@@ -50,20 +50,44 @@ function renderTrack(tracks: Track[]) {
 async function initPage() {
     const params = new URL(window.location.href).searchParams
     const album_uuid = params.get("ID")
+    
 
     if (!album_uuid) {
         console.log("UUID manquant dans l'url")
         return
     }
+
+    const main = document.getElementById("main") as HTMLDivElement
+    if (!main) {
+        console.log("id main manquant")
+        return
+    }
+    
+
+    const cover_url = `https://fidfksvexbwqhbotefji.supabase.co/storage/v1/object/public/albumCover/${album_uuid}.webp`
+    const img = createElement("img", {
+        className: ["album-cover"],
+        attributes : [
+            ["src", cover_url],
+            ["loading", "eager"],
+            ["fetchPriority", "high"],
+            ["alt", "cover"]
+        ]
+    })
         
     const data: Track[] = await get_track_from_album(album_uuid)
-    const cover_url = `https://fidfksvexbwqhbotefji.supabase.co/storage/v1/object/public/albumCover/${album_uuid}.webp`
+    
 
     let album_cover = document.getElementById("album-cover")
     if (album_cover)
         album_cover.setAttribute("src", cover_url)
 
-    renderTrack(data)
+
+    main.insertAdjacentElement("beforeend", img)
+
+    renderTrack(data, main)
+
+    
 }
 
 initPage()

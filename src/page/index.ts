@@ -27,7 +27,6 @@ function renderAlbum(albums: Album[]){
             className : ["album-cover"],
             attributes : [
                 ["src", album.cover_url],
-                ["loading", "lazy"],
                 ["alt", "cover"]
             ]
         }) as HTMLImageElement

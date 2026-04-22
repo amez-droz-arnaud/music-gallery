@@ -71,7 +71,9 @@ async function initPage() {
             ["src", cover_url],
             ["loading", "eager"],
             ["fetchPriority", "high"],
-            ["alt", "cover"]
+            ["alt", "cover"],
+            ["width", "140"],
+            ["height", "140"]
         ]
     })
         

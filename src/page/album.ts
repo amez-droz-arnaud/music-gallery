@@ -57,7 +57,7 @@ async function initPage() {
     }
         
     const data: Track[] = await get_track_from_album(album_uuid)
-    const cover_url = `https://fidfksvexbwqhbotefji.supabase.co/storage/v1/object/public/albumCover/${album_uuid}.jpg`
+    const cover_url = `https://fidfksvexbwqhbotefji.supabase.co/storage/v1/object/public/albumCover/${album_uuid}.webp`
 
     let album_cover = document.getElementById("album-cover")
     if (album_cover)

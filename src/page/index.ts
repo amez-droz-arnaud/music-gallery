@@ -12,6 +12,8 @@ function renderAlbum(albums: Album[]){
         return
     }
 
+    let index = 0
+
     for (const album of albums) {
         const div = createElement("div", {className : ["album"]})
 
@@ -21,7 +23,6 @@ function renderAlbum(albums: Album[]){
         })
 
         const div_content = createElement("div", {className : ["album-content"]})
-
         const img = createElement("img", {
             className : ["album-cover"],
             attributes : [
@@ -29,7 +30,15 @@ function renderAlbum(albums: Album[]){
                 ["loading", "lazy"],
                 ["alt", "cover"]
             ]
-        })
+        }) as HTMLImageElement
+
+        if (index == 0) {
+            img.loading = "eager"
+            img.fetchPriority = "high"
+        } else {
+            img.loading = "lazy"
+            img.fetchPriority = "low"
+        }
 
         const div_info = createElement("div", {className : ["info"]})
 

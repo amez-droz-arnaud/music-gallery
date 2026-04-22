@@ -5,7 +5,6 @@
 
 * {
     box-sizing: border-box;
-    font-family: $font-family;
 }
 
 a {
@@ -15,12 +14,17 @@ a {
 }
 
 img {
-    width: 200px;
+    display: block;
+    height: 140px;
+}
+
+html {
+    font-family: $font-family;
+    font-weight: 400;
+    color: $text-color;
 }
 
 body {
-
-    color: $text-color;
     background-color: $background-color;
     margin: 0;
 }
@@ -50,9 +54,7 @@ body {
         gap: 1rem;
 
         img.album-cover {
-            display: block;
-            height: 140px;
-            flex-shrink: 0;
+
         }
     }
 

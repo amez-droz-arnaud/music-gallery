@@ -71,6 +71,8 @@ function renderAlbum(albums: Album[]){
         div_content.append(img, div_info)
         div.append(title, div_content, comment, a)   
         container.insertAdjacentElement("beforeend", div)
+
+        index += 1
     }
 }
 

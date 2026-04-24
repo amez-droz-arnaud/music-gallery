@@ -1,13 +1,15 @@
-import { get_track_from_album } from "../ressource/fetch"
+import { getTrack } from "../ressource/fetch"
 import type { Track } from "../types"
-
+import { getParam } from "../utils/url"
 import { createElement } from "../utils/dom"
+import { SUPABASE_URL } from "../ressource/supabase"
 
-function renderTrack(tracks: Track[], container: HTMLDivElement) {
+function renderTrack(tracks: Track[], container: HTMLElement) {
+
+    const track_container = createElement("div", {attributes : [["id", "track-container"]]}) as HTMLDivElement
     
     for (const track of tracks) {
-
-        const track_container = createElement("div", {attributes : [["id", "track-container"]]}) as HTMLDivElement
+        
     
         const div = createElement("div", {className: ["track"]})
 
@@ -38,37 +40,44 @@ function renderTrack(tracks: Track[], container: HTMLDivElement) {
             textContent : track.comment
         })
 
-
         div_info.append(duration, lyrics, rating)
         div.append(title, div_info, comment)
-        track_container.append(div)
-        container.insertAdjacentElement("beforeend", track_container)
+        track_container.appendChild(div)
     }
+
+    container.appendChild(track_container)
 }
 
+async function initPage(){
 
-async function initPage() {
-    const params = new URL(window.location.href).searchParams
-    const album_uuid = params.get("ID")
-    
+    const uuid = getParam("ID")
+    const name = getParam("NAME")
 
-    if (!album_uuid) {
-        console.log("UUID manquant dans l'url")
-        return
+    if (!uuid || !name ) {
+        console.log("Paramètre manquant")
+        return        
     }
 
-    const main = document.getElementById("main") as HTMLDivElement
+    document.title = name
+
+    const main = document.getElementById("main")
+
     if (!main) {
-        console.log("id main manquant")
+        console.log("ID main manquant")
         return
     }
-    
 
-    const cover_url = `https://fidfksvexbwqhbotefji.supabase.co/storage/v1/object/public/albumCover/${album_uuid}.webp`
+    const tracks = await getTrack(uuid)
+
+    if (!tracks) {
+        console.log(`Aucun titre retourné. Album ID : ${uuid}`)
+        return
+    }
+
     const img = createElement("img", {
         className: ["album-cover"],
         attributes : [
-            ["src", cover_url],
+            ["src", `${SUPABASE_URL}/storage/v1/object/public/albumCover/${uuid}.webp`],
             ["loading", "eager"],
             ["fetchPriority", "high"],
             ["alt", "cover"],
@@ -76,20 +85,9 @@ async function initPage() {
             ["height", "140"]
         ]
     })
-        
-    const data: Track[] = await get_track_from_album(album_uuid)
-    
-
-    let album_cover = document.getElementById("album-cover")
-    if (album_cover)
-        album_cover.setAttribute("src", cover_url)
-
 
     main.insertAdjacentElement("beforeend", img)
-
-    renderTrack(data, main)
-
-    
+    renderTrack(tracks, main)
 }
 
 initPage()

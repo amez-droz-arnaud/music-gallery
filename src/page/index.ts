@@ -1,11 +1,12 @@
-import { get_album } from "../ressource/fetch";
+import { getAlbum } from "../ressource/fetch";
 import type { Album } from "../types";
-
+import { getCache, setCache } from "../utils/albumCache";
 import { createElement } from "../utils/dom";
 
 
 
 function renderAlbum(albums: Album[]){
+
     let container = document.getElementById("album-container")
     if (!container) {
         console.log("l'id album-container est introuvable")
@@ -48,9 +49,14 @@ function renderAlbum(albums: Album[]){
             textContent : `de : ${album.artist_name}`
         })
 
+        const accessibility = createElement("p", {
+            className : ["accessibility"],
+            textContent : `accessibilité : ${album.accessibility}`
+        })
+
         const track_count = createElement("p", {
             className : ["track-count"],
-            textContent : `durée : ${album.track_count}`
+            textContent : `nbr de titres : ${album.track_count}`
         })
 
         const duration = createElement("p", {
@@ -61,7 +67,7 @@ function renderAlbum(albums: Album[]){
         const a = createElement("a", {
             className : ["link"],
             textContent : "aperçu",
-            attributes : [["href", `./album.html?ID=${album.id}`]]
+            attributes : [["href", `./album.html?ID=${album.id}&NAME=${album.album_name}`]]
         })
 
         const comment = createElement("p", {
@@ -69,7 +75,7 @@ function renderAlbum(albums: Album[]){
             textContent : album.comment
         })
 
-        div_info.append(artist_name, track_count, duration)
+        div_info.append(artist_name, accessibility, track_count, duration)
         div_content.append(img, div_info)
         div.append(title, div_content, comment, a)   
         container.insertAdjacentElement("beforeend", div)
@@ -78,21 +84,10 @@ function renderAlbum(albums: Album[]){
     }
 }
 
-const CACHE_DURATION: number = 1000 * 60 * 60 // 1 heure
+let data = getCache()
 
-let storedData = localStorage.getItem("albumJSON");
-let storedTime = localStorage.getItem("albumJSONTime")
+if (!data)
+    data = await getAlbum()
 
-
-let data: Album[] = storedData ? JSON.parse(storedData) : null
-let cachedTime = storedTime ? parseInt(storedTime) : null
-let isExpired = !cachedTime || Date.now() - cachedTime > CACHE_DURATION
-
-
-if (!data || isExpired){
-    data = await get_album()
-    localStorage.setItem("albumJSON", JSON.stringify(data))
-    localStorage.setItem("albumJSONTime", Date.now().toString())
-}
-
+setCache(data)
 renderAlbum(data)

@@ -1,4 +1,4 @@
-export interface ElementOptions {
+interface ElementOptions {
     className?: string[];
     textContent?: string;
     attributes?: [string, string][];

@@ -78,12 +78,6 @@ async function initPage() {
     })
         
     const data: Track[] = await get_track_from_album(album_uuid)
-    
-
-    let album_cover = document.getElementById("album-cover")
-    if (album_cover)
-        album_cover.setAttribute("src", cover_url)
-
 
     main.insertAdjacentElement("beforeend", img)
 

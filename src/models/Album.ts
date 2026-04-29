@@ -23,8 +23,8 @@ export class Album extends Music {
         this.label = data.label
         this.comment = data.comment
         this.accessibility = data.accessibility
-        this.artist = data.artist
-        this.sub_artists = data.sub_artists
+        this.artist = data.artist_name
+        this.sub_artists = data.sub_artists_name
         this.track_count = data.track_count
     }
 

@@ -1,8 +1,8 @@
 import { getTrack } from "../ressource/fetch"
-import type { Track } from "../types"
 import { getParam } from "../utils/url"
 import { createElement } from "../utils/dom"
 import { SUPABASE_URL } from "../ressource/supabase"
+import { Track } from "../models/Track"
 
 function renderTrack(tracks: Track[], container: HTMLElement) {
 
@@ -15,14 +15,14 @@ function renderTrack(tracks: Track[], container: HTMLElement) {
 
         const title = createElement("h2", {
             className: ["track-name"],
-            textContent: `${track.track_index} - ${track.track_name}`
+            textContent: `${track.index} - ${track.name}`
         })
 
         const div_info = createElement("div", {className: ["info"]})
 
         const duration = createElement("p", {
             className : ["duration"],
-            textContent : `durée : ${track.duration_m_s}`
+            textContent : `durée : ${track.formatDuration()}`
         })
 
         const lyrics = createElement("p", {

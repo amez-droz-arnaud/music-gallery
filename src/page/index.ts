@@ -1,7 +1,7 @@
 import { getAlbum } from "../ressource/fetch";
-import type { Album } from "../types";
 import { getCache, setCache } from "../utils/albumCache";
 import { createElement } from "../utils/dom";
+import { Album } from "../models/Album";
 
 
 
@@ -20,14 +20,14 @@ function renderAlbum(albums: Album[]){
 
         const title = createElement("h2",{
             className : ["album-name"],
-            textContent : album.album_name
+            textContent : album.name
         })
 
         const div_content = createElement("div", {className : ["album-content"]})
         const img = createElement("img", {
             className : ["album-cover"],
             attributes : [
-                ["src", album.cover_url],
+                ["src", album.getCoverUrl()],
                 ["alt", "cover"],
                 ["width", "140"],
                 ["height", "140"]
@@ -46,7 +46,7 @@ function renderAlbum(albums: Album[]){
 
         const artist_name = createElement("p", {
             className : ["artist-name"],
-            textContent : `de : ${album.artist_name}`
+            textContent : `de : ${album.artist}`
         })
 
         const accessibility = createElement("p", {
@@ -61,13 +61,13 @@ function renderAlbum(albums: Album[]){
 
         const duration = createElement("p", {
             className : ["duration"],
-            textContent : `durée : ${album.duration_m_s}`
+            textContent : `durée : ${album.formatDuration()}`
         })
 
         const a = createElement("a", {
             className : ["link"],
             textContent : "aperçu",
-            attributes : [["href", `./album.html?ID=${album.id}&NAME=${album.album_name}`]]
+            attributes : [["href", album.getAlbumUrl()]]
         })
 
         const comment = createElement("p", {

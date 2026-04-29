@@ -1,4 +1,4 @@
-import type { Album } from "../types"
+import { Album } from "../models/Album";
 
 const KEY_DATA = "album"
 const KEY_TIME = "time"
@@ -15,7 +15,8 @@ export function getCache(): Album[] | null {
     if (Date.now() - parseInt(time) > CACHE_DURATION)
         return null
 
-    return JSON.parse(data)
+    const parsedData = JSON.parse(data)
+    return parsedData.map((item: Record<string, any>) => new Album(item))
 }
 
 export function setCache(albums: Album[]) {

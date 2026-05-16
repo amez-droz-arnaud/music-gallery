@@ -16,6 +16,7 @@ export function getCache(): Album[] | null {
         return null
 
     const parsedData = JSON.parse(data)
+    console.log(parsedData)
     return parsedData.map((item: Record<string, any>) => new Album(item))
 }
 

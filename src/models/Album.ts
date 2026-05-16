@@ -3,7 +3,7 @@ import { SUPABASE_URL } from "../ressource/supabase"
 
 export class Album extends Music {
     id: string
-    name: string
+    album_name: string
     published_date: Date
     label: string
     comment: string
@@ -18,18 +18,18 @@ export class Album extends Music {
         super(data.duration_s)
 
         this.id = data.id
-        this.name = data.album_name
+        this.album_name = data.album_name
         this.published_date = data.published_date
         this.label = data.label
         this.comment = data.comment
         this.accessibility = data.accessibility
-        this.artist = data.artist_name
-        this.sub_artists = data.sub_artists_name
+        this.artist = data.artist
+        this.sub_artists = data.sub_artists
         this.track_count = data.track_count
     }
 
     getAlbumUrl() :string {
-        const url = `./album.html?ID=${this.id}&NAME=${this.name}`
+        const url = `./album.html?ID=${this.id}&NAME=${this.album_name}`
         return url
     }
 

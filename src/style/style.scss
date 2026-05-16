@@ -15,7 +15,6 @@ a {
 
 img {
     display: block;
-    height: 140px;
 }
 
 html {
@@ -29,32 +28,64 @@ body {
     margin: 0;
 }
 
+span.material-symbols-outlined {
+    font-variation-settings: 'FILL' 1;
+}
+
 
 #album-container {
     display: flex;
+    flex-direction: column;
     justify-self: center;
-    justify-content: space-around;
-    flex-wrap: wrap;
-
     padding: 1rem;
     gap: 1rem;
-
-    max-width: 1000px;
 }
 
 .album {
     display: flex;
     flex-direction: column;
-    max-width: 400px;
     padding: 1rem;
     border: 1px solid color.adjust($background-color, $lightness: 20%);
+
+    .album-name {
+        margin-bottom: 0;
+    }
+
+    .artist-name {
+        margin-top: 0;
+    }
+
     .album-content {
         display: flex;
+        flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
 
         img.album-cover {
+            width: 100%;
+            max-width: 400px;
+        }
 
+        div.track-count, div.duration {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        div.accessibility-bar {
+            display: flex;
+
+            span.full {
+                color: $active-color;
+            }
+
+            span.empty {
+                color: $text-color;
+            }
+        }
+
+        p.comment {
+            max-width: 300px;
         }
     }
 
@@ -68,3 +99,13 @@ body {
     }    
 }
 
+
+@media (min-width: 600px) {
+
+    #album-container {
+        justify-content: center;
+        display: grid;
+        width: 100%;
+        grid-template-columns: repeat(auto-fill, 500px);
+    }     
+}

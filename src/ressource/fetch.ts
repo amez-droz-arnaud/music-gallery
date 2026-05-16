@@ -4,6 +4,7 @@ import { Track } from "../models/Track"
 
 export async function getAlbum(): Promise<Album[]> {
     const { data } = await supabase.rpc('get_album')
+    console.log(data)
     const albums = data.map((d: Record<string, any>) => new Album(d))
     console.log("Albums récupérés")
     return albums

@@ -4,6 +4,21 @@ import { createElement } from "../utils/dom";
 import { Album } from "../models/Album";
 
 
+function renderAccessibilityBar(value: number) : HTMLElement { 
+
+    const div = createElement("div", {className : ["accessibility-bar"]})
+    for (let i = 0; i < 10; i++) {
+        let className = i < value ? "full" : "empty"
+        const img = createElement("span", {
+            className: ["material-symbols-outlined", className],
+            textContent : "square",
+        })
+        div.append(img)
+    }
+
+    return div 
+}
+
 
 function renderAlbum(albums: Album[]){
 
@@ -20,7 +35,7 @@ function renderAlbum(albums: Album[]){
 
         const title = createElement("h2",{
             className : ["album-name"],
-            textContent : album.name
+            textContent : album.album_name
         })
 
         const div_content = createElement("div", {className : ["album-content"]})
@@ -28,9 +43,7 @@ function renderAlbum(albums: Album[]){
             className : ["album-cover"],
             attributes : [
                 ["src", album.getCoverUrl()],
-                ["alt", "cover"],
-                ["width", "140"],
-                ["height", "140"]
+                ["alt", "cover"]
             ]
         }) as HTMLImageElement
 
@@ -42,26 +55,46 @@ function renderAlbum(albums: Album[]){
             img.fetchPriority = "low"
         }
 
+        const div_description = createElement("div", {className : ["description"]})
+
         const div_info = createElement("div", {className : ["info"]})
 
         const artist_name = createElement("p", {
             className : ["artist-name"],
-            textContent : `de : ${album.artist}`
+            textContent : album.artist
         })
+
+        const div_accessibility = createElement("div", {className : ["accessibility"]})
 
         const accessibility = createElement("p", {
             className : ["accessibility"],
-            textContent : `accessibilité : ${album.accessibility}`
+            textContent : "Accessibilité :"
+        })
+
+        const accessibilityBar = renderAccessibilityBar(album.accessibility)
+
+        const div_track_count = createElement("div", {className : ["track-count"]})
+
+        const track_count_svg = createElement("span", {
+            className: ["material-symbols-outlined"],
+            textContent : "music_note",
         })
 
         const track_count = createElement("p", {
             className : ["track-count"],
-            textContent : `nbr de titres : ${album.track_count}`
+            textContent : album.track_count.toString()
+        })
+
+        const div_duration = createElement("div", {className : ["duration"]})
+
+        const duration_svg = createElement("span", {
+            className: ["material-symbols-outlined"],
+            textContent : "timer",
         })
 
         const duration = createElement("p", {
             className : ["duration"],
-            textContent : `durée : ${album.formatDuration()}`
+            textContent : album.formatDuration()
         })
 
         const a = createElement("a", {
@@ -75,9 +108,15 @@ function renderAlbum(albums: Album[]){
             textContent : album.comment
         })
 
-        div_info.append(artist_name, accessibility, track_count, duration)
-        div_content.append(img, div_info)
-        div.append(title, div_content, comment, a)   
+        div_track_count.append(track_count_svg, track_count)
+        div_duration.append(duration_svg, duration)
+
+        div_info.append(div_track_count, div_duration)
+
+        div_accessibility.append(accessibility, accessibilityBar)
+        div_description.append(div_info, div_accessibility, comment)
+        div_content.append(img, div_description)
+        div.append(title, artist_name, div_content, a)   
         container.insertAdjacentElement("beforeend", div)
 
         index += 1
@@ -86,8 +125,14 @@ function renderAlbum(albums: Album[]){
 
 let data = getCache()
 
-if (!data)
+console.log(data)
+
+if (!data) {
+    console.log("Fetch des albums")
+    console.log(data)
     data = await getAlbum()
+}
+
 
 setCache(data)
 renderAlbum(data)

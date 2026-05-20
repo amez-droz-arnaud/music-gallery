@@ -2,12 +2,18 @@ import { supabase } from "./supabase"
 import { Album } from "../models/Album"
 import { Track } from "../models/Track"
 
-export async function getAlbum(): Promise<Album[]> {
-    const { data } = await supabase.rpc('get_album')
-    console.log(data)
-    const albums = data.map((d: Record<string, any>) => new Album(d))
-    console.log("Albums récupérés")
-    return albums
+export async function getAlbum(): Promise<Album[] | void> {
+    const { data, error } = await supabase.from("v_album").select()
+    if (error)
+        console.log(`Erreur lors du fetch : ${error}`)
+    else {
+        console.log(data)
+        const albums = data.map((d: Record<string, any>) => new Album(d))
+        console.log("Albums récupérés")
+        return albums
+    }
+    
+
 }
 
 

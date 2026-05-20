@@ -2,11 +2,12 @@ import { supabase } from "./supabase"
 import { Album } from "../models/Album"
 import { Track } from "../models/Track"
 
-export async function getAlbum(): Promise<Album[] | void> {
+export async function getAlbum(): Promise<Album[] | null> {
     const { data, error } = await supabase.from("v_album").select()
-    if (error)
+    if (error) {
         console.log(`Erreur lors du fetch : ${error}`)
-    else {
+        return null
+    } else {
         console.log(data)
         const albums = data.map((d: Record<string, any>) => new Album(d))
         console.log("Albums récupérés")

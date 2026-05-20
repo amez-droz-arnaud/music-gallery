@@ -127,12 +127,15 @@ let data = getCache()
 
 console.log(data)
 
+// Check cache content
 if (!data) {
     console.log("Fetch des albums")
     console.log(data)
     data = await getAlbum()
 }
 
-
-setCache(data)
-renderAlbum(data)
+// Check fetch content
+if (data) {
+    setCache(data)
+    renderAlbum(data)
+}

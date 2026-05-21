@@ -13,7 +13,8 @@ export default defineConfig({
       // pour chaque fichier .html
       input: {
         main:   resolve(__dirname, 'index.html'),
-        album:  resolve(__dirname, 'album.html')
+        album:  resolve(__dirname, 'album.html'),
+        admin:  resolve(__dirname, 'admin.html')
       }
     }
   },
